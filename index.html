@@ -170,6 +170,14 @@
     }
     .recommend-info {
       flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .recommend-stars {
+      margin-left: 12px;
+      font-size: 1.2em;
+      color: #FFD700;
+      align-self: flex-start;
     }
     .recommend-info .price {
       color: #e53935;
@@ -522,6 +530,7 @@
             <div class="price">￥4</div>
             <div class="location">档口：A区</div>
           </div>
+          <span class="recommend-stars">★★★★★</span>
         </div>
         <div class="recommend-item">
           <img src="豆浆油条.jfif" alt="豆浆油条">
@@ -530,6 +539,7 @@
             <div class="price">￥5</div>
             <div class="location">档口：B区</div>
           </div>
+          <span class="recommend-stars">★★★★☆</span>
         </div>
       </div>
       <div class="section-title">全部菜品</div>
@@ -553,6 +563,7 @@
             <div class="price">￥12</div>
             <div class="location">档口：D区</div>
           </div>
+          <span class="recommend-stars">★★★★★</span>
         </div>
         <div class="recommend-item">
           <img src="鱼香肉丝.jfif" alt="鱼香肉丝">
@@ -561,6 +572,7 @@
             <div class="price">￥15</div>
             <div class="location">档口：E区</div>
           </div>
+          <span class="recommend-stars">★★★★☆</span>
         </div>
       </div>
       <div class="section-title">全部菜品</div>
@@ -584,6 +596,7 @@
             <div class="price">￥16.8</div>
             <div class="location">档口：G区</div>
           </div>
+          <span class="recommend-stars">★★★★★</span>
         </div>
         <div class="recommend-item">
           <img src="清炒时蔬.jfif" alt="清炒时蔬">
@@ -592,6 +605,7 @@
             <div class="price">￥7</div>
             <div class="location">档口：H区</div>
           </div>
+          <span class="recommend-stars">★★★★☆</span>
         </div>
       </div>
       <div class="section-title">全部菜品</div>
@@ -666,8 +680,8 @@
       "学苑食堂": {
         breakfast: {
           recommend: [
-            { name: "皮蛋瘦肉粥", img: "皮蛋瘦肉粥.jfif", price: 4, location: "A区" },
-            { name: "豆浆油条", img: "豆浆油条.jfif", price: 5, location: "B区" }
+            { name: "皮蛋瘦肉粥", img: "皮蛋瘦肉粥.jfif", price: 4, location: "A区", star: 5 },
+            { name: "豆浆油条", img: "豆浆油条.jfif", price: 5, location: "B区", star: 4 }
           ],
           all: [
             { name: "小笼包", price: 4, location: "A区" },
@@ -677,8 +691,8 @@
         },
         lunch: {
           recommend: [
-            { name: "宫保鸡丁", img: "宫保鸡丁.jfif", price: 12, location: "D区" },
-            { name: "鱼香肉丝盖饭", img: "鱼香肉丝.jfif", price: 15, location: "E区" }
+            { name: "宫保鸡丁", img: "宫保鸡丁.jfif", price: 12, location: "D区", star: 5 },
+            { name: "鱼香肉丝盖饭", img: "鱼香肉丝.jfif", price: 15, location: "E区", star: 4 }
           ],
           all: [
             { name: "红烧排骨", price: 12, location: "D区" },
@@ -688,8 +702,8 @@
         },
         dinner: {
           recommend: [
-            { name: "番茄牛腩", img: "番茄牛腩.jpg", price: 16.8, location: "G区" },
-            { name: "清炒时蔬", img: "清炒时蔬.jfif", price: 7, location: "H区" }
+            { name: "番茄牛腩", img: "番茄牛腩.jpg", price: 16.8, location: "G区", star: 5 },
+            { name: "清炒时蔬", img: "清炒时蔬.jfif", price: 7, location: "H区", star: 4 }
           ],
           all: [
             { name: "麻婆豆腐", price: 7, location: "G区" },
@@ -701,8 +715,8 @@
       "明湖餐厅": {
         breakfast: {
           recommend: [
-            { name: "牛奶燕麦粥", img: "牛奶燕麦粥.jfif", price: 6, location: "A区" },
-            { name: "煎饺", img: "煎饺.jfif", price: 5, location: "B区" }
+            { name: "牛奶燕麦粥", img: "牛奶燕麦粥.jfif", price: 6, location: "A区", star: 5 },
+            { name: "煎饺", img: "煎饺.jfif", price: 5, location: "B区", star: 4 }
           ],
           all: [
             { name: "豆沙包", price: 3, location: "A区" },
@@ -712,8 +726,8 @@
         },
         lunch: {
           recommend: [
-            { name: "明湖烤鸭", img: "明湖烤鸭.jfif", price: 23.5, location: "D区" },
-            { name: "糖醋里脊", img: "糖醋里脊.jpg", price: 14, location: "E区" }
+            { name: "明湖烤鸭", img: "明湖烤鸭.jfif", price: 23.5, location: "D区", star: 5 },
+            { name: "糖醋里脊", img: "糖醋里脊.jpg", price: 14, location: "E区", star: 4 }
           ],
           all: [
             { name: "鱼香茄子", price: 8, location: "D区" },
@@ -723,8 +737,8 @@
         },
         dinner: {
           recommend: [
-            { name: "明湖烤鸭", img: "明湖烤鸭.jfif", price: 23.5, location: "D区" },
-            { name: "烤鸡腿", img: "烤鸡腿.jfif", price: 12, location: "G区" },
+            { name: "明湖烤鸭", img: "明湖烤鸭.jfif", price: 23.5, location: "D区", star: 5 },
+            { name: "烤鸡腿", img: "烤鸡腿.jfif", price: 12, location: "G区", star: 4 },
           ],
           all: [
             { name: "红烧豆腐", price: 7, location: "G区" },
@@ -767,12 +781,20 @@
               <div class="price">￥${item.price}</div>
               <div class="location">档口：${item.location}</div>
             </div>
+            <span class="recommend-stars">${item.star === 5 ? '★★★★★' : '★★★★☆'}</span>
           </div>
         `;
       });
-      // 全部菜品
-      let allHtml = '';
+      // 全部菜品（推荐+全部，去重）
+      const allDishesMap = {};
+      meal.recommend.forEach(item => {
+        allDishesMap[item.name] = item;
+      });
       meal.all.forEach(item => {
+        allDishesMap[item.name] = item;
+      });
+      let allHtml = '';
+      Object.values(allDishesMap).forEach(item => {
         allHtml += `<li class="dish-item">${item.name} <span class="price">￥${item.price}</span><span class="location">档口：${item.location}</span></li>`;
       });
       // 渲染到当前激活的meal-list

@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>吃了吗</title>
+  <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      background: #f7f7f7;
+      color: #333;
+    }
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      background: #e8f5e9;
+      min-height: 100vh;
+      box-shadow: 0 0 8px #b2dfdb;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #43a047;
+      padding: 16px 12px 8px 12px;
+      position: relative;
+      min-height: 80px;
+    }
+    .restaurant-select {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      color: #fff;
+      font-size: 1em;
+      position: relative;
+    }
+    .restaurant-select .icon {
+      margin-right: 4px;
+      font-size: 1.1em;
+    }
+    .dropdown {
+      display: none;
+      position: absolute;
+      left: 0;
+      top: 36px;
+      background: #fff;
+      color: #333;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px #81c784;
+      z-index: 10;
+      min-width: 120px;
+    }
+    .dropdown.active {
+      display: block;
+    }
+    .dropdown div {
+      padding: 8px 16px;
+      cursor: pointer;
+    }
+    .dropdown div:hover {
+      background: #e8f5e9;
+    }
+    .topbar-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      top: 6px;
+    }
+    .logo {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: none;
+      box-shadow: none;
+      margin: 0 auto 2px auto;
+      display: block;
+    }
+    .header {
+      font-family: "Ma Shan Zheng", cursive;
+      font-size: 1.1em;
+      color: #fff;
+      margin-top: 0px;
+      margin-bottom: 2px;
+      letter-spacing: 2px;
+      text-align: center;
+    }
+    .map-btn {
+      background: none;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      color: #fff;
+      font-size: 1.5em;
+      display: flex;
+      align-items: center;
+    }
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #a5d6a7;
+      background: #c8e6c9;
+      margin-top: 10px;
+    }
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 12px 0;
+      cursor: pointer;
+      font-size: 1.1em;
+      color: #388e3c;
+      transition: color 0.2s;
+    }
+    .tab.active {
+      color: #fff;
+      border-bottom: 2px solid #388e3c;
+      background: #43a047;
+    }
+    .meal-list {
+      display: none;
+      padding: 16px;
+    }
+    .meal-list.active {
+      display: block;
+    }
+    .section-title {
+      font-weight: bold;
+      margin: 16px 0 8px 0;
+      font-size: 1.1em;
+      color: #2e7d32;
+    }
+    .section-title-recommend {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 16px 0 8px 0;
+      font-size: 1.1em;
+      color: #2e7d32;
+      font-weight: bold;
+    }
+    .section-title-recommend .discount-btn {
+      margin-bottom: 0;
+      margin-left: 10px;
+    }
+    .recommend {
+      background: #b9f6ca;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    .recommend-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .recommend-item img {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      margin-right: 12px;
+      object-fit: cover;
+      background: #e0f2f1;
+      box-shadow: 0 1px 4px #a5d6a7;
+    }
+    .recommend-info {
+      flex: 1;
+    }
+    .recommend-info .price {
+      color: #e53935;
+      font-weight: bold;
+    }
+    .recommend-info .location {
+      color: #388e3c;
+      font-size: 0.9em;
+    }
+    .dish-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .dish-item {
+      background: #fff;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      padding: 12px;
+      box-shadow: 0 1px 4px #b2dfdb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .dish-item .price {
+      color: #e53935;
+      font-weight: bold;
+    }
+    .dish-item .location {
+      color: #388e3c;
+      font-size: 0.9em;
+      margin-left: 8px;
+    }
+    .discount-btn {
+      display: inline-block;
+      margin-bottom: 10px;
+      padding: 8px 18px;
+      background: #43a047;
+      color: #fff;
+      border-radius: 20px;
+      font-size: 1em;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 2px 6px #b2dfdb;
+      transition: background 0.2s;
+    }
+    .discount-btn:hover {
+      background: #388e3c;
+    }
+    .discount-btn-wrapper {
+      text-align: right;
+      margin-bottom: 10px;
+    }
+    @media (max-width: 600px) {
+      .container {
+        max-width: 100vw;
+        box-shadow: none;
+      }
+      .logo {
+        width: 40px;
+        height: 40px;
+      }
+    }
+    .profile-header {
+      position: relative;
+      background: linear-gradient(135deg, #43a047 0%, #a5d6a7 100%);
+      height: 80px;
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 36px;
+      z-index: 1;
+    }
+    .profile-bg {
+      position: absolute;
+      left: 0; top: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, #43a047 0%, #a5d6a7 100%);
+      z-index: 0;
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+    }
+    .profile-title {
+      position: relative;
+      z-index: 1;
+      color: #fff;
+      font-size: 1.6em;
+      font-weight: bold;
+      margin-top: 32px;
+      letter-spacing: 4px;
+      text-shadow: 0 2px 8px #388e3c44;
+    }
+    .profile-close {
+      position: absolute;
+      right: 16px;
+      top: 16px;
+      color: #fff;
+      font-size: 2em;
+      cursor: pointer;
+      z-index: 2;
+      display: none;
+    }
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: -36px;
+      margin-bottom: 16px;
+      z-index: 2;
+      position: relative;
+    }
+    .profile-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      border: 4px solid #fff;
+      background: #fff;
+      object-fit: cover;
+      margin-bottom: 8px;
+      box-shadow: 0 2px 8px #b2dfdb;
+    }
+    .profile-hello {
+      font-size: 1.1em;
+      color: #333;
+      margin-bottom: 2px;
+    }
+    .profile-desc {
+      color: #666;
+      font-size: 1em;
+      margin-bottom: 8px;
+    }
+    .profile-balance-card {
+      display: flex;
+      justify-content: space-around;
+      background: #fff;
+      border-radius: 16px;
+      margin: 0 16px;
+      padding: 16px 0 8px 0;
+      box-shadow: 0 2px 8px #b2dfdb;
+    }
+    .profile-balance-item {
+      flex: 1;
+      text-align: center;
+    }
+    .profile-balance-label {
+      color: #888;
+      font-size: 1em;
+      margin-bottom: 4px;
+    }
+    .profile-balance-value {
+      color: #222;
+      font-size: 2em;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+    .profile-balance-btns {
+      display: flex;
+      justify-content: space-around;
+      margin: 12px 16px 0 16px;
+    }
+    .profile-btn {
+      flex: 1;
+      margin: 0 8px;
+      padding: 10px 0;
+      border-radius: 24px;
+      font-size: 1.1em;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .profile-btn-orange {
+      background: #43a047;
+      color: #fff;
+    }
+    .profile-btn-outline {
+      background: #fff;
+      color: #43a047;
+      border: 2px solid #43a047;
+    }
+    .profile-section {
+      background: #fff;
+      border-radius: 16px;
+      margin: 16px 16px 0 16px;
+      padding: 12px 0 8px 0;
+      box-shadow: 0 2px 8px #b2dfdb;
+    }
+    .profile-section-title {
+      color: #2e7d32;
+      font-size: 1.1em;
+      font-weight: bold;
+      margin: 0 16px 8px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .profile-section-more {
+      color: #888;
+      font-size: 0.95em;
+      font-weight: normal;
+      cursor: pointer;
+    }
+    .profile-orders {
+      display: flex;
+      justify-content: space-around;
+      margin: 8px 0 0 0;
+    }
+    .profile-order-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #333;
+      font-size: 1em;
+    }
+    .profile-order-icon {
+      font-size: 2em;
+      margin-bottom: 4px;
+    }
+    .profile-benefits {
+      display: flex;
+      margin: 8px 0 0 16px;
+    }
+    .profile-benefit-item {
+      display: flex;
+      align-items: center;
+      color: #333;
+      font-size: 1em;
+    }
+    .profile-benefit-icon {
+      font-size: 2em;
+      margin-right: 8px;
+    }
+    .profile-footer {
+      text-align: center;
+      color: #bdbdbd;
+      margin: 32px 0 0 0;
+      font-size: 0.95em;
+    }
+    .profile-footer-logo {
+      font-weight: bold;
+      font-size: 1.1em;
+      margin-bottom: 2px;
+    }
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 0;
+      width: 100vw;
+      max-width: 480px;
+      height: 56px;
+      background: #fff;
+      box-shadow: 0 -2px 8px #b2dfdb;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 100;
+    }
+    .nav-item {
+      flex: 1;
+      text-align: center;
+      color: #888;
+      font-size: 1em;
+      cursor: pointer;
+      padding: 4px 0 0 0;
+    }
+    .nav-item.active, .nav-item:active {
+      color: #43a047;
+    }
+    .nav-icon {
+      font-size: 1.6em;
+      display: block;
+      margin-bottom: 2px;
+    }
+    .nav-icon-active {
+      color: #ff9800;
+    }
+    .popup-mask {
+      position: fixed;
+      left: 0; top: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .popup-content {
+      background: #fff;
+      border-radius: 12px;
+      padding: 40px 24px 24px 24px;
+      position: relative;
+      box-shadow: 0 4px 24px #b2dfdb;
+      text-align: center;
+      max-width: 90vw;
+      max-height: 80vh;
+    }
+    .popup-close {
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      font-size: 2em;
+      color: #43a047;
+      cursor: pointer;
+      font-weight: bold;
+      line-height: 1;
+    }
+    .popup-img {
+      max-width: 240px;
+      max-height: 60vh;
+      border-radius: 8px;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="home-page">
+    <div class="topbar">
+      <div class="restaurant-select" onclick="toggleDropdown()">
+        <span class="icon">📍</span>
+        <span id="current-restaurant">学苑食堂</span>
+        <span style="margin-left:4px;">&#9662;</span>
+        <div class="dropdown" id="dropdown">
+          <div onclick="selectRestaurant('学苑食堂')">学苑食堂</div>
+          <div onclick="selectRestaurant('明湖餐厅')">明湖餐厅</div>
+        </div>
+      </div>
+      <div class="topbar-logo">
+        <img src="眼镜蛇.png" alt="Logo" class="logo">
+        <div class="header">吃了吗</div>
+      </div>
+      <button class="map-btn" onclick="showMap()" title="查看地图">🗺️</button>
+    </div>
+    <div class="tabs">
+      <div class="tab active" onclick="showMeal(0)">早餐</div>
+      <div class="tab" onclick="showMeal(1)">午餐</div>
+      <div class="tab" onclick="showMeal(2)">晚餐</div>
+    </div>
+    <!-- 早餐 -->
+    <div class="meal-list active" id="meal-0">
+      <div class="section-title-recommend">
+        <span>智能推荐菜品</span>
+        <a href="https://mp.weixin.qq.com/s/K9PdT4xR4x5zMrz6y5VjsA" target="_blank" class="discount-btn">本周优惠菜单</a>
+      </div>
+      <div class="recommend">
+        <div class="recommend-item">
+          <img src="皮蛋瘦肉粥.jfif" alt="皮蛋瘦肉粥">
+          <div class="recommend-info">
+            <div>皮蛋瘦肉粥</div>
+            <div class="price">￥4</div>
+            <div class="location">档口：A区</div>
+          </div>
+        </div>
+        <div class="recommend-item">
+          <img src="豆浆油条.jfif" alt="豆浆油条">
+          <div class="recommend-info">
+            <div>豆浆油条</div>
+            <div class="price">￥5</div>
+            <div class="location">档口：B区</div>
+          </div>
+        </div>
+      </div>
+      <div class="section-title">全部菜品</div>
+      <ul class="dish-list">
+        <li class="dish-item">小笼包 <span class="price">￥4</span><span class="location">档口：A区</span></li>
+        <li class="dish-item">鸡蛋灌饼 <span class="price">￥5</span><span class="location">档口：B区</span></li>
+        <li class="dish-item">葱油饼 <span class="price">￥4</span><span class="location">档口：B区</span></li>
+      </ul>
+    </div>
+    <!-- 午餐 -->
+    <div class="meal-list" id="meal-1">
+      <div class="section-title-recommend">
+        <span>智能推荐菜品</span>
+        <a href="https://mp.weixin.qq.com/s/K9PdT4xR4x5zMrz6y5VjsA" target="_blank" class="discount-btn">本周优惠菜单</a>
+      </div>
+      <div class="recommend">
+        <div class="recommend-item">
+          <img src="宫保鸡丁.jfif" alt="宫保鸡丁">
+          <div class="recommend-info">
+            <div>宫保鸡丁</div>
+            <div class="price">￥12</div>
+            <div class="location">档口：D区</div>
+          </div>
+        </div>
+        <div class="recommend-item">
+          <img src="鱼香肉丝.jfif" alt="鱼香肉丝">
+          <div class="recommend-info">
+            <div>鱼香肉丝盖饭</div>
+            <div class="price">￥15</div>
+            <div class="location">档口：E区</div>
+          </div>
+        </div>
+      </div>
+      <div class="section-title">全部菜品</div>
+      <ul class="dish-list">
+        <li class="dish-item">红烧排骨 <span class="price">￥12</span><span class="location">档口：D区</span></li>
+        <li class="dish-item">西红柿炒蛋 <span class="price">￥8</span><span class="location">档口：E区</span></li>
+        <li class="dish-item">青椒土豆丝 <span class="price">￥6</span><span class="location">档口：F区</span></li>
+      </ul>
+    </div>
+    <!-- 晚餐 -->
+    <div class="meal-list" id="meal-2">
+      <div class="section-title-recommend">
+        <span>智能推荐菜品</span>
+        <a href="https://mp.weixin.qq.com/s/K9PdT4xR4x5zMrz6y5VjsA" target="_blank" class="discount-btn">本周优惠菜单</a>
+      </div>
+      <div class="recommend">
+        <div class="recommend-item">
+          <img src="番茄牛腩.jpg" alt="番茄牛腩">
+          <div class="recommend-info">
+            <div>番茄牛腩</div>
+            <div class="price">￥16.8</div>
+            <div class="location">档口：G区</div>
+          </div>
+        </div>
+        <div class="recommend-item">
+          <img src="清炒时蔬.jfif" alt="清炒时蔬">
+          <div class="recommend-info">
+            <div>清炒时蔬</div>
+            <div class="price">￥7</div>
+            <div class="location">档口：H区</div>
+          </div>
+        </div>
+      </div>
+      <div class="section-title">全部菜品</div>
+      <ul class="dish-list">
+        <li class="dish-item">麻婆豆腐 <span class="price">￥7</span><span class="location">档口：G区</span></li>
+        <li class="dish-item">蒜蓉生菜 <span class="price">￥5</span><span class="location">档口：H区</span></li>
+        <li class="dish-item">红烧茄子 <span class="price">￥6</span><span class="location">档口：I区</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container" id="profile-page" style="display:none;">
+    <div class="profile-header">
+      <div class="profile-bg"></div>
+      <div class="profile-title">个人中心</div>
+      <div class="profile-close">×</div>
+    </div>
+    <div class="profile-info">
+      <img src="眼镜蛇.png" class="profile-avatar" alt="头像">
+      <div class="profile-hello">Hello, <span id="profile-name">用户</span></div>
+      <div class="profile-desc">唯有梦想和美食不可辜负</div>
+    </div>
+    <div class="profile-balance-card">
+      <div class="profile-balance-item">
+        <div class="profile-balance-label">余额</div>
+        <div class="profile-balance-value" id="profile-balance">999.99</div>
+      </div>
+      <div class="profile-balance-item">
+        <div class="profile-balance-label">补贴</div>
+        <div class="profile-balance-value" id="profile-subsidy">0.00</div>
+      </div>
+    </div>
+    <div class="profile-balance-btns">
+      <button class="profile-btn profile-btn-orange" onclick="showRechargePopup()">立即充值</button>
+      <button class="profile-btn profile-btn-outline">开通自动充</button>
+    </div>
+    <div class="profile-section">
+      <div class="profile-section-title">我的订单 <span class="profile-section-more" onclick="showAllOrders()">查看全部 &gt;</span></div>
+      <div class="profile-orders">
+        <div class="profile-order-item" onclick="showPaidOrders()"><span class="profile-order-icon">￥</span><div>已付款</div></div>
+        <div class="profile-order-item" onclick="showRefundOrders()"><span class="profile-order-icon">⟳</span><div>退款/售后</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item" id="nav-home" onclick="showPage('home')">
+      <span class="nav-icon">🔔</span>
+      <div>首页</div>
+    </div>
+    <div class="nav-item" id="nav-profile" onclick="showPage('profile')">
+      <span class="nav-icon nav-icon-active">😊</span>
+      <div>个人中心</div>
+    </div>
+  </div>
+  <div id="recharge-popup" class="popup-mask" style="display:none;">
+    <div class="popup-content">
+      <span class="popup-close" onclick="closeRechargePopup()">×</span>
+      <img src="收款码.png" alt="充值二维码" class="popup-img">
+      <div style="color: #e53935; font-size: 0.95em; margin-top: 8px;">
+        仅供娱乐！！！不要充值！！！如果你真的想投喂，那我无力挽回😋
+      </div>
+    </div>
+  </div>
+  <div id="order-popup" class="popup-mask" style="display:none;">
+    <div class="popup-content">
+      <span class="popup-close" onclick="closeOrderPopup()">×</span>
+      <div id="order-popup-content"></div>
+    </div>
+  </div>
+  <script>
+    // 餐厅菜品数据
+    const restaurantData = {
+      "学苑食堂": {
+        breakfast: {
+          recommend: [
+            { name: "皮蛋瘦肉粥", img: "皮蛋瘦肉粥.jfif", price: 4, location: "A区" },
+            { name: "豆浆油条", img: "豆浆油条.jfif", price: 5, location: "B区" }
+          ],
+          all: [
+            { name: "小笼包", price: 4, location: "A区" },
+            { name: "鸡蛋灌饼", price: 5, location: "B区" },
+            { name: "葱油饼", price: 4, location: "B区" }
+          ]
+        },
+        lunch: {
+          recommend: [
+            { name: "宫保鸡丁", img: "宫保鸡丁.jfif", price: 12, location: "D区" },
+            { name: "鱼香肉丝盖饭", img: "鱼香肉丝.jfif", price: 15, location: "E区" }
+          ],
+          all: [
+            { name: "红烧排骨", price: 12, location: "D区" },
+            { name: "西红柿炒蛋", price: 8, location: "E区" },
+            { name: "青椒土豆丝", price: 6, location: "F区" }
+          ]
+        },
+        dinner: {
+          recommend: [
+            { name: "番茄牛腩", img: "番茄牛腩.jpg", price: 16.8, location: "G区" },
+            { name: "清炒时蔬", img: "清炒时蔬.jfif", price: 7, location: "H区" }
+          ],
+          all: [
+            { name: "麻婆豆腐", price: 7, location: "G区" },
+            { name: "蒜蓉生菜", price: 5, location: "H区" },
+            { name: "红烧茄子", price: 6, location: "I区" }
+          ]
+        }
+      },
+      "明湖餐厅": {
+        breakfast: {
+          recommend: [
+            { name: "牛奶燕麦粥", img: "牛奶燕麦粥.jfif", price: 6, location: "A区" },
+            { name: "煎饺", img: "煎饺.jfif", price: 5, location: "B区" }
+          ],
+          all: [
+            { name: "豆沙包", price: 3, location: "A区" },
+            { name: "蛋挞", price: 4, location: "B区" },
+            { name: "玉米棒", price: 2, location: "C区" }
+          ]
+        },
+        lunch: {
+          recommend: [
+            { name: "明湖烤鸭", img: "明湖烤鸭.jfif", price: 23.5, location: "D区" },
+            { name: "糖醋里脊", img: "糖醋里脊.jpg", price: 14, location: "E区" }
+          ],
+          all: [
+            { name: "鱼香茄子", price: 8, location: "D区" },
+            { name: "青椒肉丝", price: 10, location: "E区" },
+            { name: "土豆炖牛腩", price: 16, location: "F区" }
+          ]
+        },
+        dinner: {
+          recommend: [
+            { name: "明湖烤鸭", img: "明湖烤鸭.jfif", price: 23.5, location: "D区" },
+            { name: "烤鸡腿", img: "烤鸡腿.jfif", price: 12, location: "G区" },
+          ],
+          all: [
+            { name: "红烧豆腐", price: 7, location: "G区" },
+            { name: "凉拌黄瓜", price: 4, location: "H区" },
+            { name: "炒面", price: 8, location: "I区" }
+          ]
+        }
+      }
+    };
+    let currentRestaurant = document.getElementById('current-restaurant').innerText.trim();
+    let currentMeal = 0; // 0:早餐 1:午餐 2:晚餐
+
+    function selectRestaurant(name) {
+      document.getElementById('current-restaurant').innerText = name;
+      document.getElementById('dropdown').classList.remove('active');
+      currentRestaurant = name;
+      renderMealList();
+    }
+    function showMeal(idx) {
+      currentMeal = idx;
+      const tabs = document.querySelectorAll('.tab');
+      const lists = document.querySelectorAll('.meal-list');
+      tabs.forEach((tab, i) => {
+        tab.classList.toggle('active', i === idx);
+        lists[i].classList.toggle('active', i === idx);
+      });
+      renderMealList();
+    }
+    function renderMealList() {
+      const mealTypes = ["breakfast", "lunch", "dinner"];
+      const meal = restaurantData[currentRestaurant][mealTypes[currentMeal]];
+      // 推荐菜品
+      let recommendHtml = '';
+      meal.recommend.forEach(item => {
+        recommendHtml += `
+          <div class="recommend-item">
+            <img src="${item.img}" alt="${item.name}">
+            <div class="recommend-info">
+              <div>${item.name}</div>
+              <div class="price">￥${item.price}</div>
+              <div class="location">档口：${item.location}</div>
+            </div>
+          </div>
+        `;
+      });
+      // 全部菜品
+      let allHtml = '';
+      meal.all.forEach(item => {
+        allHtml += `<li class="dish-item">${item.name} <span class="price">￥${item.price}</span><span class="location">档口：${item.location}</span></li>`;
+      });
+      // 渲染到当前激活的meal-list
+      const mealLists = document.querySelectorAll('.meal-list');
+      mealLists.forEach((list, idx) => {
+        if(idx === currentMeal) {
+          list.querySelector('.recommend').innerHTML = recommendHtml;
+          list.querySelector('.dish-list').innerHTML = allHtml;
+        }
+      });
+    }
+    // 页面初始渲染
+    document.addEventListener('DOMContentLoaded', function() {
+      renderMealList();
+    });
+    function toggleDropdown() {
+      document.getElementById('dropdown').classList.toggle('active');
+    }
+    function showMap() {
+      alert('这里可以弹出地图，或跳转到地图页面');
+    }
+    // 点击外部关闭下拉
+    document.addEventListener('click', function(e){
+      if(!e.target.closest('.restaurant-select')){
+        document.getElementById('dropdown').classList.remove('active');
+      }
+    });
+    function showPage(page) {
+      if(page === 'home') {
+        document.getElementById('home-page').style.display = '';
+        document.getElementById('profile-page').style.display = 'none';
+        document.getElementById('nav-home').classList.add('active');
+        document.getElementById('nav-profile').classList.remove('active');
+      } else {
+        document.getElementById('home-page').style.display = 'none';
+        document.getElementById('profile-page').style.display = '';
+        document.getElementById('nav-home').classList.remove('active');
+        document.getElementById('nav-profile').classList.add('active');
+      }
+    }
+    function showRechargePopup() {
+      document.getElementById('recharge-popup').style.display = 'flex';
+    }
+    function closeRechargePopup() {
+      document.getElementById('recharge-popup').style.display = 'none';
+    }
+    function showPaidOrders() {
+      document.getElementById('order-popup-content').innerHTML = '<div style="font-size:1.3em;color:#888;font-weight:bold;">无订单信息</div>';
+      document.getElementById('order-popup').style.display = 'flex';
+    }
+    function showRefundOrders() {
+      document.getElementById('order-popup-content').innerHTML = '<div style="font-size:1.3em;color:#888;font-weight:bold;">无订单信息</div>';
+      document.getElementById('order-popup').style.display = 'flex';
+    }
+    function showAllOrders() {
+      document.getElementById('order-popup-content').innerHTML = `
+        <div style="display:flex;gap:56px;justify-content:center;align-items:flex-start;">
+          <div style="text-align:center;min-width:90px;">
+            <div style="font-weight:bold;color:#43a047;margin-bottom:18px;font-size:1.15em;">已付款</div>
+            <div style="font-size:1.15em;color:#888;font-weight:bold;">无订单信息</div>
+          </div>
+          <div style="text-align:center;min-width:90px;">
+            <div style="font-weight:bold;color:#43a047;margin-bottom:18px;font-size:1.15em;">退款/售后</div>
+            <div style="font-size:1.15em;color:#888;font-weight:bold;">无订单信息</div>
+          </div>
+        </div>
+      `;
+      document.getElementById('order-popup').style.display = 'flex';
+    }
+    function closeOrderPopup() {
+      document.getElementById('order-popup').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
